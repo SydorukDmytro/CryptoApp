@@ -2,11 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptoApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:CryptoApp.Helpers.Converters"
+        Title="CryptoApp" Height="600" Width="800"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+    </Window.Resources>
     <Grid>
-
+        <ListView ItemsSource="{Binding Currencies}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="#" Width="40" DisplayMemberBinding="{Binding MarketCapRank}"/>
+                    <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Symbol" Width="80" DisplayMemberBinding="{Binding Symbol}"/>
+                    <GridViewColumn Header="Price (USD)" Width="120" DisplayMemberBinding="{Binding CurrentPrice}"/>
+                    <GridViewColumn Header="Market Cap" Width="150" DisplayMemberBinding="{Binding MarketCap}"/>
+                    <GridViewColumn Header="Change 24h (%)" Width="120" DisplayMemberBinding="{Binding PriceChangePercentage24h}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
     </Grid>
 </Window>
