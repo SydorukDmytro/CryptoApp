@@ -1,6 +1,8 @@
 ﻿using CryptoApp.Services;
+using CryptoApp.Services.Interfaces;
 using CryptoApp.ViewModels;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
 using System.Net.Http;
@@ -13,29 +15,35 @@ namespace CryptoApp
     /// </summary>
     public partial class App : Application
     {
-        public IConfiguration Configuration { get; private set; }
+        private IServiceProvider _serviceProvider;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            Configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var apiKey = Configuration["ApiSettings:CoinGeckoApiKey"];
-            Console.WriteLine($"Loaded CoinGecko API Key: {apiKey}");
+            var services = new ServiceCollection();
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("x-cg-demo-api-key", apiKey);
+            services.AddSingleton(sp =>
+            {
+                var apiKey = configuration["ApiSettings:CoinGeckoApiKey"];
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("x-cg-demo-api-key", apiKey);
+                return client;
+            });
 
-            var cryptoService = new CryptoApiService(client);
+            services.AddSingleton<ICryptoApiService, CryptoApiService>();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<MainWindow>();
+            _serviceProvider = services.BuildServiceProvider();
 
-            var mainVm = new MainViewModel(cryptoService);
-
-            var mainWindow = new MainWindow(mainVm);
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+
         }
     }
 
