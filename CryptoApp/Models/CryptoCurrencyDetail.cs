@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -17,74 +18,18 @@ namespace CryptoApp.Models
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
-
+        [JsonPropertyName("description")]
+        public Description Description { get; set; }
         [JsonPropertyName("image")]
-        public string Image { get; set; }
-
-        [JsonPropertyName("current_price")]
-        public decimal CurrentPrice { get; set; }
-
-        [JsonPropertyName("market_cap")]
-        public decimal MarketCap { get; set; }
-
-        [JsonPropertyName("market_cap_rank")]
-        public int? MarketCapRank { get; set; }
-
-        [JsonPropertyName("fully_diluted_valuation")]
-        public decimal? FullyDilutedValuation { get; set; }
-
-        [JsonPropertyName("total_volume")]
-        public decimal TotalVolume { get; set; }
-
-        [JsonPropertyName("high_24h")]
-        public decimal High24h { get; set; }
-
-        [JsonPropertyName("low_24h")]
-        public decimal Low24h { get; set; }
-
-        [JsonPropertyName("price_change_24h")]
-        public decimal PriceChange24h { get; set; }
-
-        [JsonPropertyName("price_change_percentage_24h")]
-        public double PriceChangePercentage24h { get; set; }
-
-        [JsonPropertyName("market_cap_change_24h")]
-        public decimal MarketCapChange24h { get; set; }
-
-        [JsonPropertyName("market_cap_change_percentage_24h")]
-        public double MarketCapChangePercentage24h { get; set; }
-
-        [JsonPropertyName("circulating_supply")]
-        public decimal CirculatingSupply { get; set; }
-
-        [JsonPropertyName("total_supply")]
-        public decimal? TotalSupply { get; set; }
-
-        [JsonPropertyName("max_supply")]
-        public decimal? MaxSupply { get; set; }
-
-        [JsonPropertyName("ath")]
-        public decimal AllTimeHigh { get; set; }
-
-        [JsonPropertyName("ath_change_percentage")]
-        public double AllTimeHighChangePercentage { get; set; }
-
-        [JsonPropertyName("ath_date")]
-        public DateTime AllTimeHighDate { get; set; }
-
-        [JsonPropertyName("atl")]
-        public decimal AllTimeLow { get; set; }
-
-        [JsonPropertyName("atl_change_percentage")]
-        public double AllTimeLowChangePercentage { get; set; }
-
-        [JsonPropertyName("atl_date")]
-        public DateTime AllTimeLowDate { get; set; }
-
-        [JsonPropertyName("roi")]
-        public object? Roi { get; set; }
-
+        public Image Image { get; set; }
+        [JsonPropertyName("market_data")]
+        public MarketData MarketData { get; set; }
         [JsonPropertyName("last_updated")]
         public DateTime LastUpdated { get; set; }
+        [JsonPropertyName("tickers")]
+        public List<Ticker> Tickers { get; set; }
+        [JsonPropertyName("links")]
+        public Links Links { get; set; }
+
     }
 }

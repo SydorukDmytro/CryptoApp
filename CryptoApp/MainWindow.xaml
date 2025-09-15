@@ -5,24 +5,20 @@
         xmlns:local="clr-namespace:CryptoApp"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:conv="clr-namespace:CryptoApp.Helpers.Converters"
+        xmlns:vm="clr-namespace:CryptoApp.ViewModels" 
+        xmlns:views="clr-namespace:CryptoApp.Views"
         Title="CryptoApp" Height="600" Width="800"
         mc:Ignorable="d">
     <Window.Resources>
         <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <DataTemplate DataType="{x:Type vm:MainViewModel}">
+            <views:MainPageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CryptoDetailViewModel}">
+            <views:CryptoDetailView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
-        <ListView ItemsSource="{Binding Currencies}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="#" Width="40" DisplayMemberBinding="{Binding MarketCapRank}"/>
-                    <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Symbol" Width="80" DisplayMemberBinding="{Binding Symbol}"/>
-                    <GridViewColumn Header="Price (USD)" Width="120" DisplayMemberBinding="{Binding CurrentPrice}"/>
-                    <GridViewColumn Header="Market Cap" Width="150" DisplayMemberBinding="{Binding MarketCap}"/>
-                    <GridViewColumn Header="Change 24h (%)" Width="120" DisplayMemberBinding="{Binding PriceChangePercentage24h}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,23,0" RenderTransformOrigin="1.107,-0.248"/>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

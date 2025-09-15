@@ -10,5 +10,6 @@ namespace CryptoApp.Services.Interfaces
     public interface ICryptoApiService
     {
         Task<List<CryptoCurrencySummary>> GetTopCurrenciesAsync(int count, CancellationToken token = default);
+        Task<CryptoCurrencyDetail?> GetCurrencyDetailAsync(string id, CancellationToken token = default);
     }
 }

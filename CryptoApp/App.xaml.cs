@@ -37,11 +37,16 @@ namespace CryptoApp
             });
 
             services.AddSingleton<ICryptoApiService, CryptoApiService>();
-            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<CryptoDetailViewModel>();
             services.AddSingleton<MainWindow>();
             _serviceProvider = services.BuildServiceProvider();
+            var nav = _serviceProvider.GetRequiredService<INavigationService>() as NavigationService;
+            nav?.NavigateTo<MainViewModel>();
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            mainWindow.DataContext = nav;
             mainWindow.Show();
 
         }
