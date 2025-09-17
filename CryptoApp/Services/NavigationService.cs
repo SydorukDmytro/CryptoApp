@@ -33,13 +33,13 @@ namespace CryptoApp.Services
 
         public void NavigateTo<TViewModel>() where TViewModel : ObservableObject
         {
-            var vm = (ObservableObject)_serviceProvider.GetService(typeof(TViewModel));
+            var vm = _serviceProvider.GetService(typeof(TViewModel)) as ObservableObject;
             Navigate(vm);
         }
 
         public void NavigateTo<TViewModel>(object parameter) where TViewModel : ObservableObject
         {
-            var vm = (ObservableObject)_serviceProvider.GetService(typeof(TViewModel));
+            var vm = _serviceProvider.GetService(typeof(TViewModel)) as ObservableObject;
 
             if(parameter != null && vm is IParameterReceiver receiver)
                 receiver.ReceiveParameter(parameter);

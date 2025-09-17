@@ -31,5 +31,19 @@ namespace CryptoApp.Views
             if (DataContext is MainViewModel vm && vm.SelectedCurrency != null)
                 vm.ShowDetailsCommand.Execute(vm.SelectedCurrency);
         }
+        private void NumberOnlyTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
+        private void NumberOnlyTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (DataContext is MainViewModel vm && vm.LoadCommand.CanExecute(null))
+                {
+                    vm.LoadCommand.Execute(null);
+                }
+            }
+        }
     }
 }

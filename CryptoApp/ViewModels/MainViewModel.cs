@@ -5,9 +5,11 @@ using CryptoApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace CryptoApp.ViewModels
 {
@@ -15,10 +17,14 @@ namespace CryptoApp.ViewModels
     {
         private readonly ICryptoApiService _cryptoApiService;
         private readonly INavigationService _navigationService;
+        
 
         [ObservableProperty] private ObservableCollection<CryptoCurrencySummary> currencies = new();
+        public ICollectionView CurrenciesView { get; }
         [ObservableProperty] private bool isBusy;
         [ObservableProperty] private CryptoCurrencySummary? selectedCurrency;
+        [ObservableProperty] private string searchText;
+        [ObservableProperty] private int loadCount = 10;
         public IAsyncRelayCommand LoadCommand { get; }
         public IAsyncRelayCommand ShowDetailsCommand { get; }
 
@@ -28,6 +34,8 @@ namespace CryptoApp.ViewModels
             _navigationService = navigationService;
             LoadCommand = new AsyncRelayCommand(LoadAsync);
             ShowDetailsCommand = new AsyncRelayCommand<CryptoCurrencySummary>(ShowDetailsAsync);
+            CurrenciesView = CollectionViewSource.GetDefaultView(Currencies);
+            CurrenciesView.Filter = FilterCurrencies;
         }
 
         private async Task LoadAsync()
@@ -37,7 +45,7 @@ namespace CryptoApp.ViewModels
             try
             {
                 IsBusy = true;
-                var list = await _cryptoApiService.GetTopCurrenciesAsync(10);
+                var list = await _cryptoApiService.GetTopCurrenciesAsync(LoadCount);
 
                 Currencies.Clear();
                 foreach (var cur in list)
@@ -66,6 +74,21 @@ namespace CryptoApp.ViewModels
             {
                 IsBusy = false;
             }
+        }
+        private bool FilterCurrencies(object obj)
+        {
+            if(obj is CryptoCurrencySummary currency)
+            {
+                if (string.IsNullOrWhiteSpace(SearchText))
+                    return true;
+                return currency.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                       currency.Symbol.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+            }
+            return false;
+        }
+        partial void OnSearchTextChanged(string value)
+        {
+            CurrenciesView.Refresh();
         }
     }
 }
