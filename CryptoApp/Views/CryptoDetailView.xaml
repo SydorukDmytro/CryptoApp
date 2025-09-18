@@ -23,7 +23,7 @@
             <TextBlock Text="{Binding CryptoCurrency.Name}" FontSize="22" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel Orientation="Vertical" Margin="0,0,0,10">
                 <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
